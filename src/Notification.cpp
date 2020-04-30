@@ -36,18 +36,25 @@ Notification::~Notification()
 
 void Notification::setData(const QString &msg, Type type)
 {
+    NotificationHandler *handler = NotificationHandler::instance();
+
     ui->message->setText(msg);
     QIcon icon;
+    QString bgColor, fgColor = "#FFF";
     switch(type) {
         case Information:
             icon = qApp->style()->standardIcon(QStyle::SP_MessageBoxInformation);
+            bgColor = handler->activeTheme() == NotificationHandler::Dark ? "#388E3C" : "#4CAF50";
             break;
         case Warning:
             icon = qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning);
+            bgColor = handler->activeTheme() == NotificationHandler::Dark ? "#FBC02D" : "#FFEB3B";
             break;
         case Error:
             icon = qApp->style()->standardIcon(QStyle::SP_MessageBoxCritical);
+            bgColor = handler->activeTheme() == NotificationHandler::Dark ? "#D32F2F" : "#F44336";
     }
+    setStyleSheet(QString("background-color: %1; color: %2; font-size: 14px; font-weight: bold;").arg(bgColor, fgColor));
     ui->icon->setPixmap(icon.pixmap(QSize(64, 64)));
 }
 
