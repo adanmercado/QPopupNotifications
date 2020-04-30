@@ -8,6 +8,7 @@
 #define DIALOG_H
 
 #include <QDialog>
+#include <QMap>
 #include <NotificationHandler.h>
 
 QT_BEGIN_NAMESPACE
@@ -23,10 +24,13 @@ public:
     ~Dialog();
 
 private:
+    void addNotification();
+    void removeNotification();
     void showNotifications();
 
 private:
     Ui::Dialog *ui;
     NotificationHandler *notificationHandler;
+    QMap<QString, Notification::Type> types;
 };
 #endif // DIALOG_H
