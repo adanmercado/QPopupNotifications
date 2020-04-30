@@ -1,0 +1,9 @@
+*.pro.user
+*.o
+moc_*
+ui_*
+Makefile
+[Bb]uild*/
+._*
+.DS_Store
+.directory
