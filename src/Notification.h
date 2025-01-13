@@ -21,13 +21,13 @@ class Notification : public QDialog
     Q_OBJECT
 
 public:
-    enum Type {
+    enum class Type {
         Information,
         Warning,
         Error
     };
 
-    enum Status {
+    enum class Status {
         Started,
         Pending,
         Finished

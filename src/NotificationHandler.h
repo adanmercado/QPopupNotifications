@@ -16,12 +16,12 @@
 class NotificationHandler
 {
 public:
-    enum Theme {
+    enum class Theme {
         Light,
         Dark
     };
 
-    enum Position {
+    enum class Position {
         TopLeft,
         TopRight,
         BottomLeft,

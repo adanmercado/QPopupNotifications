@@ -25,7 +25,7 @@ Notification::Notification(QWidget *parent, const int &number) :
     setAttribute(Qt::WA_ShowWithoutActivating);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint);
 
-    m_status = Pending;
+    m_status = Status::Pending;
     m_number = number;
 }
 
@@ -42,17 +42,17 @@ void Notification::setData(const QString &msg, Type type)
     QIcon icon;
     QString bgColor, fgColor = "#FFF";
     switch(type) {
-        case Information:
+        case Type::Information:
             icon = qApp->style()->standardIcon(QStyle::SP_MessageBoxInformation);
-            bgColor = handler->activeTheme() == NotificationHandler::Dark ? "#388E3C" : "#4CAF50";
+            bgColor = handler->activeTheme() == NotificationHandler::Theme::Dark ? "#388E3C" : "#4CAF50";
             break;
-        case Warning:
+        case Type::Warning:
             icon = qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning);
-            bgColor = handler->activeTheme() == NotificationHandler::Dark ? "#FBC02D" : "#FFEB3B";
+            bgColor = handler->activeTheme() == NotificationHandler::Theme::Dark ? "#FBC02D" : "#FFEB3B";
             break;
-        case Error:
+        case Type::Error:
             icon = qApp->style()->standardIcon(QStyle::SP_MessageBoxCritical);
-            bgColor = handler->activeTheme() == NotificationHandler::Dark ? "#D32F2F" : "#F44336";
+            bgColor = handler->activeTheme() == NotificationHandler::Theme::Dark ? "#D32F2F" : "#F44336";
     }
     setStyleSheet(QString("background-color: %1; color: %2; font-size: 14px; font-weight: bold;").arg(bgColor, fgColor));
     ui->icon->setPixmap(icon.pixmap(QSize(64, 64)));
@@ -61,14 +61,14 @@ void Notification::setData(const QString &msg, Type type)
 void Notification::showNotification()
 {
     setPosition();
-    m_status = Started;
+    m_status = Status::Started;
     show();
     emit started();
 }
 
 void Notification::closeNotification()
 {
-    m_status = Finished;
+    m_status = Status::Finished;
     close();
     emit finished(m_number);
 }
@@ -81,7 +81,7 @@ Notification::Status Notification::status() const
 void Notification::setNotificationNumber(const int &number)
 {
     m_number = number;
-    if(m_status == Started)
+    if(m_status == Status::Started)
         setPosition();
 }
 
@@ -92,22 +92,22 @@ void Notification::setPosition()
     QRect position;
     int posY;
     switch(handler->notificationPos()) {
-        case NotificationHandler::TopLeft:
+        case NotificationHandler::Position::TopLeft:
             position = QStyle::alignedRect(Qt::LeftToRight, Qt::AlignTop | Qt::AlignLeft, size(), qApp->primaryScreen()->availableGeometry());
             posY = position.y() + handler->notificationsMargin() + (m_number * height()) + (m_number * handler->notificationSpacing());
             position.moveTo(position.x() + handler->notificationsMargin(), posY);
             break;
-        case NotificationHandler::TopRight:
+        case NotificationHandler::Position::TopRight:
             position = QStyle::alignedRect(Qt::LeftToRight, Qt::AlignTop | Qt::AlignRight, size(), qApp->primaryScreen()->availableGeometry());
             posY = position.y() + handler->notificationsMargin() + (m_number * height()) + (m_number * handler->notificationSpacing());
             position.moveTo(position.x() - handler->notificationsMargin(), posY);
             break;
-        case NotificationHandler::BottomLeft:
+        case NotificationHandler::Position::BottomLeft:
             position = QStyle::alignedRect(Qt::LeftToRight, Qt::AlignBottom | Qt::AlignLeft, size(), qApp->primaryScreen()->availableGeometry());
             posY = position.y() - handler->notificationsMargin() - (m_number * height()) - (m_number * handler->notificationSpacing());
             position.moveTo(position.x() + handler->notificationsMargin(), posY);
             break;
-        case NotificationHandler::BottomRight:
+        case NotificationHandler::Position::BottomRight:
             position = QStyle::alignedRect(Qt::LeftToRight, Qt::AlignBottom | Qt::AlignRight, size(), qApp->primaryScreen()->availableGeometry());
             posY = position.y() - handler->notificationsMargin() - (m_number * height()) - (m_number * handler->notificationSpacing());
             position.moveTo(position.x() - handler->notificationsMargin(), posY);

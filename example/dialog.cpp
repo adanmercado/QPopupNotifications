@@ -20,14 +20,14 @@ Dialog::Dialog(QWidget *parent)
 
     ui->notificationsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    types.insert("Information", Notification::Information);
-    types.insert("Warning", Notification::Warning);
-    types.insert("Error", Notification::Error);
+    types.insert("Information", Notification::Type::Information);
+    types.insert("Warning", Notification::Type::Warning);
+    types.insert("Error", Notification::Type::Error);
 
     notificationHandler = NotificationHandler::instance();
     notificationHandler->setMaxVisibleNotifications(2);
     notificationHandler->setLifespan(2000);
-    notificationHandler->setNotificationsPos(NotificationHandler::BottomRight);
+    notificationHandler->setNotificationsPos(NotificationHandler::Position::BottomRight);
     notificationHandler->setNotifcationsSpacing(10);
 }
 
@@ -41,13 +41,13 @@ void Dialog::addNotification()
 {
     QString msg = ui->messageTextEdit->toPlainText().trimmed();
     if(msg.isEmpty()) {
-        notificationHandler->addMessage("Enter a message to add it to the table", Notification::Error);
+        notificationHandler->addMessage("Enter a message to add it to the table", Notification::Type::Error);
         return;
     }
 
     int type = ui->notificationTypeCombo->currentIndex();
     if(!type) {
-        notificationHandler->addMessage("Specify a valid notification type", Notification::Error);
+        notificationHandler->addMessage("Specify a valid notification type", Notification::Type::Error);
         return;
     }
 
@@ -65,7 +65,7 @@ void Dialog::removeNotification()
 {
     QModelIndexList selection = ui->notificationsTable->selectionModel()->selectedIndexes();
     if(selection.isEmpty()) {
-        notificationHandler->addMessage("Select the notification to remove", Notification::Error);
+        notificationHandler->addMessage("Select the notification to remove", Notification::Type::Error);
         return;
     }
 
@@ -81,7 +81,7 @@ void Dialog::showNotifications()
         return;
 
     QString msg;
-    Notification::Type type = Notification::Information;
+    Notification::Type type = Notification::Type::Information;
     for(int row = 0; row < model->rowCount(); row++) {
         msg = model->index(row, 0).data().toString();
         type = types.value(model->index(row, 1).data().toString());

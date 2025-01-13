@@ -21,8 +21,8 @@ NotificationHandler::NotificationHandler()
     m_activeNotifications = 0;
     m_maxVisibleNotifications = 3;
     m_lifespan = 3000;
-    m_activeTheme = Light;
-    m_notificationsPos = TopRight;
+    m_activeTheme = Theme::Light;
+    m_notificationsPos = Position::TopRight;
     m_notificationsMargin = 10;
     m_notificationsSpacing = 6;
 }
@@ -118,7 +118,7 @@ void NotificationHandler::updateVisiblePopups()
         Notification *popup = nullptr;
         for(int i = 0; i < m_notificationList.size(); i++) {
             popup = m_notificationList.at(i);
-            if(popup->status() == Notification::Pending && m_activeNotifications < m_maxVisibleNotifications) {
+            if(popup->status() == Notification::Status::Pending && m_activeNotifications < m_maxVisibleNotifications) {
                 popup->showNotification();
                 QTimer::singleShot(m_lifespan, popup, &Notification::closeNotification);
             }
