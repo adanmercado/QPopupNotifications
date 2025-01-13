@@ -4,7 +4,7 @@
 # https://github.com/adanmercado
 #
 
-CONFIG += c++11
+CONFIG += c++17
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
